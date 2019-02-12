@@ -1,0 +1,21 @@
+<h2>
+  Liste des documents enregistrés
+</h2>
+
+<table>
+  <tr>
+    <th>Prénom</th>
+    <th>Nom</th>
+    <th>Personne sujette à la procédure</th>
+    <th>Résumé des faits</th>
+    <th>Statut document</th>
+  </tr>
+  <tr *ngFor='let form of documentList' >
+    <td>{{form.form1Prenom}}</td>
+    <td>{{form.form1Nom}}</td>
+    <td>{{form.form1InfoPersonneSujetteProcedure}}</td>
+    <td>{{form.form1ResumeDesFaits}}</td>
+    <td>{{form.form1Statut}}</td>
+  </tr>
+
+</table>
