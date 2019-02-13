@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Form1} from '../form1';
 import {DataService} from '../data.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute,Router} from '@angular/router';
 
 @Component({
   selector: 'app-formulaire1',
@@ -23,11 +23,40 @@ export class Formulaire1Component implements OnInit {
   form1ObjetDeLaRequete: string="";
   form1Sujet: string="";
   form1Statut: string;
+  id: string;
+  FormList: Form1[]=[];
+  Form: Form1={
+    form1Prenom: "",
+    form1Nom: "",
+    form1LieuDate: "",
+    form1AutoriteJudiciaire: "",
+    form1PresenteePar: "",
+    form1Traite: "",
+    form1InfoPersonneSujetteProcedure: "",
+    form1FaitsPrevenus: "",
+    form1ResumeDesFaits: "",
+    form1QualificationJuridiqueDesFaits: "",
+    form1ObjetDeLaRequete: "",
+    form1Sujet: ""
+  };
 
-  constructor(private dataService: DataService, private router: Router) {
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+    this.route.params.subscribe( params => this.id=params.id )
+    console.log("Id du document: "+this.id)
   }
 
   ngOnInit() {
+    if(this.id=="new"){
+      console.log("Creating new document")
+    }
+    else{
+      this.getDocument()
+      console.log("Loading data from database");
+      this.loadDataintoForm();
+      console.log("Champ prénom: " + this.form1Prenom)
+
+
+    }
   }
 
   addFormBrouillon(){
@@ -84,6 +113,32 @@ export class Formulaire1Component implements OnInit {
       this.router.navigateByUrl('/liste-documents');
     }
 
+  }
+
+
+  getDocument(){
+    this.dataService.getForm1byId(this.id)
+    .subscribe(form => {
+      this.FormList = form;
+      this.Form = this.FormList[0];
+      console.log('data from dataService : '+this.Form.form1Prenom);
+    });
+  }
+
+
+  loadDataintoForm(){
+    this.form1Prenom = this.Form.form1Prenom;
+    this.form1Nom = this.Form.form1Nom;
+    this.form1LieuDate = this.Form.form1LieuDate;
+    this.form1AutoriteJudiciaire = this.Form.form1AutoriteJudiciaire;
+    this.form1PresenteePar = this.Form.form1PresenteePar;
+    this.form1Traite= this.Form.form1Traite;
+    this.form1InfoPersonneSujetteProcedure= this.Form.form1InfoPersonneSujetteProcedure;
+    this.form1FaitsPrevenus= this.Form.form1FaitsPrevenus;
+    this.form1ResumeDesFaits= this.Form.form1ResumeDesFaits;
+    this.form1QualificationJuridiqueDesFaits= this.Form.form1QualificationJuridiqueDesFaits;
+    this.form1ObjetDeLaRequete= this.Form.form1ObjetDeLaRequete;
+    this.form1Sujet= this.Form.form1Sujet;
   }
 
 

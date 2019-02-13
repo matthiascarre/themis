@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Form1} from '../form1';
 import {DataService} from '../data.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-formlist',
@@ -11,7 +12,7 @@ import {DataService} from '../data.service';
 export class FormlistComponent implements OnInit {
   documentList: Form1[]=[];
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private router: Router) { }
 
 
   getDocumentList(){
@@ -21,6 +22,8 @@ export class FormlistComponent implements OnInit {
       console.log('data from dataService : '+this.documentList);
     })
   }
+
+  
 
   ngOnInit() {
     this.getDocumentList();

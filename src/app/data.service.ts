@@ -19,6 +19,11 @@ export class DataService {
     .pipe(map(res => res.json()));
   }
 
+  getForm1byId(formId){
+    return this.http.get('http://localhost:3000/api/form1/'+ formId)
+    .pipe(map(res => res.json()));
+  }
+
 
   addForm1(newForm){
     let headers = new Headers();
