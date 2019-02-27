@@ -16,6 +16,8 @@ import { Formulaire2Component } from './formulaire2/formulaire2.component';
 import { AboutComponent } from './about/about.component';
 import { CommissionRogatoireComponent } from './commission-rogatoire/commission-rogatoire.component';
 import { FormlistComponent } from './formlist/formlist.component';
+import { SpeechRecComponent } from './speech-rec/speech-rec.component';
+import { SpeechRecognitionComponent } from './speech-recognition/speech-recognition.component';
 
 const ROUTES: Routes=[
   {path:"",component:AccueilComponent},
@@ -37,7 +39,9 @@ const ROUTES: Routes=[
     Formulaire2Component,
     AboutComponent,
     CommissionRogatoireComponent,
-    FormlistComponent
+    FormlistComponent,
+    SpeechRecComponent,
+    SpeechRecognitionComponent
   ],
   imports: [
     BrowserModule,

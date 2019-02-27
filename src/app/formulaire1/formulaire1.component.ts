@@ -37,7 +37,8 @@ export class Formulaire1Component implements OnInit {
     form1ResumeDesFaits: "",
     form1QualificationJuridiqueDesFaits: "",
     form1ObjetDeLaRequete: "",
-    form1Sujet: ""
+    form1Sujet: "",
+    form1Statut: ""
   };
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
