@@ -1,16 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { SpeechRecognitionService } from '../speechrecognitionservice.service';
+import {DataService} from '../data.service';
+import {ActivatedRoute,Router} from '@angular/router';
 
 @Component({
   selector: 'app-speech-recognition',
   templateUrl: './speech-recognition.component.html',
-  styleUrls: ['./speech-recognition.component.css']
+  styleUrls: ['./speech-recognition.component.css'],
+  providers: [DataService]
 })
 export class SpeechRecognitionComponent implements OnInit {
   showSearchButton: boolean;
   speechData: string;
+  //intent: string;
 
-  constructor(private speechRecognitionService: SpeechRecognitionService) {
+  constructor(private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
       this.showSearchButton = true;
       this.speechData = "";
   }
@@ -32,12 +36,19 @@ export class SpeechRecognitionComponent implements OnInit {
           (value) => {
               this.speechData = value;
               console.log(value);
+              this.dataService.getLuisIntent(value)
+              .subscribe(intent =>{
+                console.log("L'intent est : " + intent.topScoringIntent.intent);
+                this.applyIntent(intent.topScoringIntent.intent);
+              });
+
+
           },
-          //errror
+          //error
           (err) => {
               console.log(err);
               if (err.error == "no-speech") {
-                  console.log("--restatring service--");
+                  console.log("--restarting service--");
                   this.activateSpeechSearchMovie();
               }
           },
@@ -48,5 +59,23 @@ export class SpeechRecognitionComponent implements OnInit {
               this.activateSpeechSearchMovie();
           });
   }
+
+
+  applyIntent(intent){
+    console.log("On applique l'intent " + intent)
+    if(intent == "Ouvrir Formulaire"){
+      console.log("Boucle if intent=Ouvrir Formulaire")
+      this.router.navigateByUrl('/formulaire1/new');
+    }
+    else if(intent == "Retour Accueil"){
+      this.router.navigateByUrl('');
+    }
+    else{
+      console.log("Intent non reconnu.")
+    }
+  }
+
+
+
 
 }
