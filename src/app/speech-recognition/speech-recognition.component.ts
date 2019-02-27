@@ -70,6 +70,13 @@ export class SpeechRecognitionComponent implements OnInit {
     else if(intent == "Retour Accueil"){
       this.router.navigateByUrl('');
     }
+    else if(intent == "Ouvrir A Propos"){
+      this.router.navigateByUrl('/about');
+    }
+
+    else if(intent == "Ouvrir Liste Documents"){
+      this.router.navigateByUrl('/liste-documents');
+    }
     else{
       console.log("Intent non reconnu.")
     }
