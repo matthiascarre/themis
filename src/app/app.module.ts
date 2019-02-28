@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import {Routes,RouterModule} from '@angular/router';
 import { HttpModule} from "@angular/http";
 import {FormsModule} from '@angular/forms';
+import {MatDialogModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 
@@ -12,6 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { NavigationbarComponent } from './navigationbar/navigationbar.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { Formulaire1Component } from './formulaire1/formulaire1.component';
+import { DialogExample } from './formulaire1/formulaire1.component';
 import { Formulaire2Component } from './formulaire2/formulaire2.component';
 import { AboutComponent } from './about/about.component';
 import { CommissionRogatoireComponent } from './commission-rogatoire/commission-rogatoire.component';
@@ -41,15 +44,19 @@ const ROUTES: Routes=[
     CommissionRogatoireComponent,
     FormlistComponent,
     SpeechRecComponent,
-    SpeechRecognitionComponent
+    SpeechRecognitionComponent,
+    DialogExample
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     RouterModule.forRoot(ROUTES),
     HttpModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule,
+    BrowserAnimationsModule
   ],
+  entryComponents: [DialogExample],
   providers: [],
   bootstrap: [AppComponent]
 })

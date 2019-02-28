@@ -40,8 +40,8 @@
     <textarea [(ngModel)]="form1Sujet" id="form1Sujet" name="form1Sujet" placeholder="Write something.." style="height:200px" ></textarea>
 
     <div>
-    <button class="button" name="button" value="Brouillon" (click)="addFormBrouillon()">Enregister en tant que brouillon</button>
-    <button class="button" name="button" value="Complete" (click)="addFormComplete()">Enregister en tant que document complété</button>
+    <button *ngIf="form1Statut=='Brouillon'" class="button" name="button" value="Brouillon" (click)="addFormBrouillon()">Enregister en tant que brouillon</button>
+    <button *ngIf="form1Statut=='Brouillon'" class="button" name="button" value="Complete" (click)="addFormComplete()">Enregister en tant que document complété</button>
     </div>
 
 </div>

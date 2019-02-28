@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Form1} from '../form1';
 import {DataService} from '../data.service';
 import {ActivatedRoute,Router} from '@angular/router';
+//import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'app-formulaire1',
@@ -9,6 +11,7 @@ import {ActivatedRoute,Router} from '@angular/router';
   styleUrls: ['./formulaire1.component.css'],
   providers: [DataService]
 })
+
 export class Formulaire1Component implements OnInit {
   form1Prenom: string;
   form1Nom: string;
@@ -26,8 +29,9 @@ export class Formulaire1Component implements OnInit {
   id: string;
   //FormList: Form1[]=[];
   Form: Form1;
+  booleantest: boolean= false;
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+  constructor(public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.route.params.subscribe( params => this.id=params.id )
     console.log("Id du document: "+this.id)
   }
@@ -47,48 +51,74 @@ export class Formulaire1Component implements OnInit {
       this.form1QualificationJuridiqueDesFaits = "";
       this.form1ObjetDeLaRequete = "";
       this.form1Sujet = "";
+      this.form1Statut = "Brouillon";
     }
     else{
-      this.getDocument()
       console.log("Loading data from database");
-      this.loadDataintoForm(this.Form);
-      console.log("Champ prénom: " + this.form1Prenom)
-
-
+      this.getDocument()
     }
   }
 
   addFormBrouillon(){
-    let newForm : Form1 = {
-      form1Prenom: this.form1Prenom,
-      form1Nom: this.form1Nom,
-      form1LieuDate: this.form1LieuDate,
-      form1AutoriteJudiciaire: this.form1AutoriteJudiciaire,
-      form1PresenteePar: this.form1PresenteePar,
-      form1Traite: this.form1Traite,
-      form1InfoPersonneSujetteProcedure: this.form1InfoPersonneSujetteProcedure,
-      form1FaitsPrevenus: this.form1FaitsPrevenus,
-      form1ResumeDesFaits: this.form1ResumeDesFaits,
-      form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
-      form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
-      form1Sujet: this.form1Sujet,
-      form1Statut: "Brouillon"
-    }
+    if(this.id=="new"){
+      let newForm : Form1 = {
+        form1Prenom: this.form1Prenom,
+        form1Nom: this.form1Nom,
+        form1LieuDate: this.form1LieuDate,
+        form1AutoriteJudiciaire: this.form1AutoriteJudiciaire,
+        form1PresenteePar: this.form1PresenteePar,
+        form1Traite: this.form1Traite,
+        form1InfoPersonneSujetteProcedure: this.form1InfoPersonneSujetteProcedure,
+        form1FaitsPrevenus: this.form1FaitsPrevenus,
+        form1ResumeDesFaits: this.form1ResumeDesFaits,
+        form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
+        form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
+        form1Sujet: this.form1Sujet,
+        form1Statut: "Brouillon"
+      }
       console.log(newForm);
       this.dataService.addForm1(newForm)
       .subscribe(forms =>{
         console.log(forms);
       });
+    }
+    else {
+      let newForm : Form1 = {
+        form1Prenom: this.form1Prenom,
+        form1Nom: this.form1Nom,
+        form1LieuDate: this.form1LieuDate,
+        form1AutoriteJudiciaire: this.form1AutoriteJudiciaire,
+        form1PresenteePar: this.form1PresenteePar,
+        form1Traite: this.form1Traite,
+        form1InfoPersonneSujetteProcedure: this.form1InfoPersonneSujetteProcedure,
+        form1FaitsPrevenus: this.form1FaitsPrevenus,
+        form1ResumeDesFaits: this.form1ResumeDesFaits,
+        form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
+        form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
+        form1Sujet: this.form1Sujet,
+        form1Statut: "Brouillon"
+      }
+      console.log(newForm);
+      this.dataService.updateForm1(newForm,this.id)
+      .subscribe(forms =>{
+        console.log(forms);
+      });
+    }
   }
 
 
 
   addFormComplete(){
-    console.log("Fonction addFormComplete() called")
-    if(this.form1Prenom=="" || this.form1Nom=="" || this.form1LieuDate=="" || this.form1AutoriteJudiciaire=="" || this.form1PresenteePar=="" || this.form1Traite=="" || this.form1InfoPersonneSujetteProcedure=="" || this.form1FaitsPrevenus=="" || this.form1ResumeDesFaits=="" || this.form1QualificationJuridiqueDesFaits=="" || this.form1ObjetDeLaRequete=="" || this.form1Sujet==""){
+    console.log("Prénom : " + this.form1Prenom)
+    if( this.form1Prenom=="" || this.form1Nom=="" || this.form1LieuDate=="" || this.form1AutoriteJudiciaire=="" || this.form1PresenteePar=="" || this.form1Traite=="" || this.form1InfoPersonneSujetteProcedure=="" || this.form1FaitsPrevenus=="" || this.form1ResumeDesFaits=="" || this.form1QualificationJuridiqueDesFaits=="" || this.form1ObjetDeLaRequete=="" || this.form1Sujet==""){
       console.log("Données manquantes");
+      this.openDialog();
     }
-    else{
+    else if(this.form1Prenom == null || this.form1Nom == null || this.form1LieuDate == null || this.form1AutoriteJudiciaire == null || this.form1PresenteePar == null || this.form1Traite == null || this.form1InfoPersonneSujetteProcedure == null || this.form1FaitsPrevenus == null || this.form1ResumeDesFaits == null || this.form1QualificationJuridiqueDesFaits == null || this.form1ObjetDeLaRequete == null || this.form1Sujet == null){
+      console.log("Données manquantes");
+      this.openDialog();
+    }
+    else if(this.id=="new"){
       let newForm : Form1 = {
         form1Prenom: this.form1Prenom,
         form1Nom: this.form1Nom,
@@ -108,8 +138,31 @@ export class Formulaire1Component implements OnInit {
       this.dataService.addForm1(newForm)
       .subscribe(forms =>{
         console.log(forms);
+        this.router.navigateByUrl('/liste-documents');
       });
-      this.router.navigateByUrl('/liste-documents');
+    }
+    else {
+      let newForm : Form1 = {
+        form1Prenom: this.form1Prenom,
+        form1Nom: this.form1Nom,
+        form1LieuDate: this.form1LieuDate,
+        form1AutoriteJudiciaire: this.form1AutoriteJudiciaire,
+        form1PresenteePar: this.form1PresenteePar,
+        form1Traite: this.form1Traite,
+        form1InfoPersonneSujetteProcedure: this.form1InfoPersonneSujetteProcedure,
+        form1FaitsPrevenus: this.form1FaitsPrevenus,
+        form1ResumeDesFaits: this.form1ResumeDesFaits,
+        form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
+        form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
+        form1Sujet: this.form1Sujet,
+        form1Statut: "Complété"
+      }
+      console.log(newForm);
+      this.dataService.updateForm1(newForm,this.id)
+      .subscribe(forms =>{
+        console.log(forms);
+        this.router.navigateByUrl('/liste-documents');
+      });
     }
 
   }
@@ -120,6 +173,7 @@ export class Formulaire1Component implements OnInit {
     .subscribe(form => {
       this.Form = form[0];
       console.log('data from dataService : '+this.Form.form1Prenom);
+      this.loadDataintoForm(this.Form);
     });
   }
 
@@ -139,5 +193,31 @@ export class Formulaire1Component implements OnInit {
     this.form1Sujet= form.form1Sujet;
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogExample
+  );
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+
+}
+
+@Component({
+  selector: 'dialog-example',
+  templateUrl: 'dialog-example.html',
+})
+export class DialogExample {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogExample>//,
+    //@Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 
 }
