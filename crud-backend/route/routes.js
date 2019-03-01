@@ -9,7 +9,9 @@ const Form1 = require('../model/form1');
 
 //retrieving data from database
 
-router.get('/form1list',(req,res,next)=>{
+
+//retrieving all document list
+router.get('/form1List',(req,res,next)=>{
   Form1.find(function(err,form1){
     if(err){
       res.json(err);
@@ -20,6 +22,18 @@ router.get('/form1list',(req,res,next)=>{
   });
 })
 
+
+//retrieving one document (based on id)
+router.get('/form1/:id',(req,res,next)=>{
+  Form1.find({_id: req.params.id},function(err,form1){
+    if(err){
+      res.json(err);
+    }
+    else{
+      res.json(form1);
+    }
+  });
+})
 
 //inserting new data
 

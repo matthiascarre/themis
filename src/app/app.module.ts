@@ -19,7 +19,7 @@ import { FormlistComponent } from './formlist/formlist.component';
 
 const ROUTES: Routes=[
   {path:"",component:AccueilComponent},
-  {path:"formulaire1",component:Formulaire1Component},
+  {path:"formulaire1/:id",component:Formulaire1Component},
   {path:"formulaire2",component:Formulaire2Component},
   {path:"about",component:AboutComponent},
   {path:"liste-documents",component:FormlistComponent},
