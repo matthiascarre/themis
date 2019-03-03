@@ -1,9 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {Form1} from '../form1';
 import {DataService} from '../data.service';
 import {ActivatedRoute,Router} from '@angular/router';
 //import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {MatDialog, MatDialogRef} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+
+
+export interface DialogData {
+  message: string;
+}
+
 
 @Component({
   selector: 'app-formulaire1',
@@ -30,6 +36,7 @@ export class Formulaire1Component implements OnInit {
   //FormList: Form1[]=[];
   Form: Form1;
   booleantest: boolean= false;
+  popupmessage: string;
 
   constructor(public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.route.params.subscribe( params => this.id=params.id )
@@ -80,6 +87,9 @@ export class Formulaire1Component implements OnInit {
       this.dataService.addForm1(newForm)
       .subscribe(forms =>{
         console.log(forms);
+        this.popupmessage = "Formulaire bien sauvegardé."
+        this.openDialog();
+        this.router.navigateByUrl('/liste-documents');
       });
     }
     else {
@@ -102,6 +112,9 @@ export class Formulaire1Component implements OnInit {
       this.dataService.updateForm1(newForm,this.id)
       .subscribe(forms =>{
         console.log(forms);
+        this.popupmessage = "Formulaire bien sauvegardé."
+        this.openDialog();
+        this.router.navigateByUrl('/liste-documents');
       });
     }
   }
@@ -112,10 +125,12 @@ export class Formulaire1Component implements OnInit {
     console.log("Prénom : " + this.form1Prenom)
     if( this.form1Prenom=="" || this.form1Nom=="" || this.form1LieuDate=="" || this.form1AutoriteJudiciaire=="" || this.form1PresenteePar=="" || this.form1Traite=="" || this.form1InfoPersonneSujetteProcedure=="" || this.form1FaitsPrevenus=="" || this.form1ResumeDesFaits=="" || this.form1QualificationJuridiqueDesFaits=="" || this.form1ObjetDeLaRequete=="" || this.form1Sujet==""){
       console.log("Données manquantes");
+      this.popupmessage = "Certaines données n'ont pas été renseignées."
       this.openDialog();
     }
     else if(this.form1Prenom == null || this.form1Nom == null || this.form1LieuDate == null || this.form1AutoriteJudiciaire == null || this.form1PresenteePar == null || this.form1Traite == null || this.form1InfoPersonneSujetteProcedure == null || this.form1FaitsPrevenus == null || this.form1ResumeDesFaits == null || this.form1QualificationJuridiqueDesFaits == null || this.form1ObjetDeLaRequete == null || this.form1Sujet == null){
       console.log("Données manquantes");
+      this.popupmessage = "Certaines données n'ont pas été renseignées."
       this.openDialog();
     }
     else if(this.id=="new"){
@@ -138,6 +153,8 @@ export class Formulaire1Component implements OnInit {
       this.dataService.addForm1(newForm)
       .subscribe(forms =>{
         console.log(forms);
+        this.popupmessage = "Formulaire bien sauvegardé."
+        this.openDialog();
         this.router.navigateByUrl('/liste-documents');
       });
     }
@@ -194,7 +211,11 @@ export class Formulaire1Component implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogExample
+    const dialogRef = this.dialog.open(DialogExample, {
+      data: {
+            message: this.popupmessage
+          },
+        }
   );
 
     dialogRef.afterClosed().subscribe(result => {
@@ -211,9 +232,8 @@ export class Formulaire1Component implements OnInit {
 })
 export class DialogExample {
 
-  constructor(
-    public dialogRef: MatDialogRef<DialogExample>//,
-    //@Inject(MAT_DIALOG_DATA) public data: DialogData
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData,
+  public dialogRef: MatDialogRef<DialogExample>,
   ) {}
 
   onNoClick(): void {
