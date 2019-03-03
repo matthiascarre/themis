@@ -87,10 +87,15 @@ export class Formulaire1Component implements OnInit {
       this.dataService.addForm1(newForm)
       .subscribe(forms =>{
         console.log(forms);
-        this.popupmessage = "Formulaire bien sauvegardé."
+        this.popupmessage = "Formulaire bien sauvegardé.";
         this.openDialog();
         this.router.navigateByUrl('/liste-documents');
-      });
+      },
+      (err) => {
+        this.popupmessage = "Erreur lors de la sauvegarde du formulaire.";
+        this.openDialog();
+      }
+    );
     }
     else {
       let newForm : Form1 = {
@@ -112,10 +117,15 @@ export class Formulaire1Component implements OnInit {
       this.dataService.updateForm1(newForm,this.id)
       .subscribe(forms =>{
         console.log(forms);
-        this.popupmessage = "Formulaire bien sauvegardé."
+        this.popupmessage = "Formulaire bien sauvegardé.";
         this.openDialog();
         this.router.navigateByUrl('/liste-documents');
-      });
+      },
+      (err) => {
+        this.popupmessage = "Erreur lors de la sauvegarde du formulaire.";
+        this.openDialog();
+      }
+    );
     }
   }
 
@@ -156,7 +166,12 @@ export class Formulaire1Component implements OnInit {
         this.popupmessage = "Formulaire bien sauvegardé."
         this.openDialog();
         this.router.navigateByUrl('/liste-documents');
-      });
+      },
+      (err) => {
+        this.popupmessage = "Erreur lors de la sauvegarde du formulaire.";
+        this.openDialog();
+      }
+    );
     }
     else {
       let newForm : Form1 = {
@@ -178,8 +193,15 @@ export class Formulaire1Component implements OnInit {
       this.dataService.updateForm1(newForm,this.id)
       .subscribe(forms =>{
         console.log(forms);
+        this.popupmessage = "Formulaire bien sauvegardé.";
+        this.openDialog();
         this.router.navigateByUrl('/liste-documents');
-      });
+      },
+      (err) => {
+        this.popupmessage = "Erreur lors de la sauvegarde du formulaire.";
+        this.openDialog();
+      }
+    );
     }
 
   }

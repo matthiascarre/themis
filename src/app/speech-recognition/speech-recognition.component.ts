@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SpeechRecognitionService } from '../speechrecognitionservice.service';
 import {DataService} from '../data.service';
+import {ApplyIntentService} from '../applyintentservice.service';
 import {ActivatedRoute,Router} from '@angular/router';
 
 @Component({
@@ -14,7 +15,7 @@ export class SpeechRecognitionComponent implements OnInit {
   speechData: string;
   //intent: string;
 
-  constructor(private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
+  constructor(private applyIntentService: ApplyIntentService ,private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
       this.showSearchButton = true;
       this.speechData = "";
   }
@@ -39,7 +40,7 @@ export class SpeechRecognitionComponent implements OnInit {
               this.dataService.getLuisIntent(value)
               .subscribe(intent =>{
                 console.log("L'intent est : " + intent.topScoringIntent.intent);
-                this.applyIntent(intent.topScoringIntent.intent);
+                this.applyIntentService.applyIntent(intent.topScoringIntent.intent);
               });
 
 
@@ -59,30 +60,5 @@ export class SpeechRecognitionComponent implements OnInit {
               this.activateSpeechSearchMovie();
           });
   }
-
-
-  applyIntent(intent){
-    console.log("On applique l'intent " + intent)
-    if(intent == "Ouvrir Formulaire"){
-      console.log("Boucle if intent=Ouvrir Formulaire")
-      this.router.navigateByUrl('/formulaire1/new');
-    }
-    else if(intent == "Retour Accueil"){
-      this.router.navigateByUrl('');
-    }
-    else if(intent == "Ouvrir A Propos"){
-      this.router.navigateByUrl('/about');
-    }
-
-    else if(intent == "Ouvrir Liste Documents"){
-      this.router.navigateByUrl('/liste-documents');
-    }
-    else{
-      console.log("Intent non reconnu.")
-    }
-  }
-
-
-
 
 }
