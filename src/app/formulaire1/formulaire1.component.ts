@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {Form1} from '../form1';
 import {DataService} from '../data.service';
 import {ActivatedRoute,Router} from '@angular/router';
-//import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 
@@ -251,6 +250,7 @@ export class Formulaire1Component implements OnInit {
 @Component({
   selector: 'dialog-example',
   templateUrl: 'dialog-example.html',
+  styleUrls: ['dialog-example.css'],
 })
 export class DialogExample {
 

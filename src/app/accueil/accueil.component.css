@@ -1,6 +1,14 @@
 .center {
   display: block;
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+div.contenu {
+  display: block;
+  text-align: center;
+  width: 100%;
+  color: rgb(8, 101, 124);
+  font-size: 18pt;
 }

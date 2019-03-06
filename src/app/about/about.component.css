@@ -1,0 +1,18 @@
+div.title {
+    display: block;
+    float: left;
+    width: 70%;
+    margin: 3px;
+    font-size: 12pt;
+    color: rgb(8, 101, 124);
+    margin-left: 25px
+}
+
+div.contenu {
+    display: block;
+    float: left;
+    width: 70%;
+    margin: 3px;
+    font-size: 11pt;
+    margin-left: 40px
+}

@@ -13,7 +13,8 @@ import {ActivatedRoute,Router} from '@angular/router';
 export class SpeechRecognitionComponent implements OnInit {
   showSearchButton: boolean;
   speechData: string;
-  //intent: string;
+  isListenning: boolean=false;
+  buttonText: string = "Activer reconnaissance vocale";
 
   constructor(private applyIntentService: ApplyIntentService ,private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
       this.showSearchButton = true;
@@ -28,8 +29,19 @@ export class SpeechRecognitionComponent implements OnInit {
       this.speechRecognitionService.DestroySpeechObject();
   }
 
+  buttonClick(): void {
+    if(this.isListenning == false){
+      this.activateSpeechSearchMovie()
+    }
+    else{
+      this.stopVoiceRecog()
+
+    }
+  }
+
   activateSpeechSearchMovie(): void {
-      this.showSearchButton = false;
+      this.isListenning = true;
+      this.buttonText = "Stopper la reconnaissance vocale"
 
       this.speechRecognitionService.record()
           .subscribe(
@@ -57,8 +69,19 @@ export class SpeechRecognitionComponent implements OnInit {
           () => {
               this.showSearchButton = true;
               console.log("--complete--");
-              this.activateSpeechSearchMovie();
+              //this.activateSpeechSearchMovie();
           });
   }
+
+
+  stopVoiceRecog(){
+    this.isListenning = false;
+    this.buttonText = "Activer la reconnaissance vocale"
+    this.speechRecognitionService.DestroySpeechObject();
+    console.log("Stopped listenning!")
+  }
+
+
+
 
 }
