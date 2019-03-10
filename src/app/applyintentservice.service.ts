@@ -1,11 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import {ActivatedRoute,Router} from '@angular/router';
+import {Subject} from 'rxjs/Subject';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApplyIntentService {
+
+
+
+  private IntentSource = new Subject<string>();
+  public IntentMessage = this.IntentSource.asObservable();
 
 
   constructor(private router: Router) { }
@@ -27,7 +33,7 @@ export class ApplyIntentService {
       this.router.navigateByUrl('/liste-documents');
     }
     else if(intent == "Sauvegarder formulaire"){
-      ;
+      this.IntentSource.next("Sauvegarder formulaire");
     }
     else{
       console.log("Intent non reconnu.")

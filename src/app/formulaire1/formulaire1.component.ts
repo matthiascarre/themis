@@ -1,8 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {Form1} from '../form1';
 import {DataService} from '../data.service';
+import {ApplyIntentService} from '../applyintentservice.service';
 import {ActivatedRoute,Router} from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 
 
 export interface DialogData {
@@ -37,12 +39,23 @@ export class Formulaire1Component implements OnInit {
   booleantest: boolean= false;
   popupmessage: string;
 
-  constructor(public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+  private intentRef: Subscription = null;
+
+  constructor(public intent:ApplyIntentService, public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.route.params.subscribe( params => this.id=params.id )
     console.log("Id du document: "+this.id)
   }
 
   ngOnInit() {
+    this.intentRef = this.intent.IntentMessage.subscribe((text)=>{
+      if(text=="Sauvegarder formulaire"){
+        this.addFormBrouillon();
+      }
+    },
+    (err)=>{
+      console.log("Erreur lors du traitement de l'intent.");
+    });
+    
     if(this.id=="new"){
       console.log("Creating new document")
       this.form1Prenom = "";
@@ -229,6 +242,7 @@ export class Formulaire1Component implements OnInit {
     this.form1QualificationJuridiqueDesFaits= form.form1QualificationJuridiqueDesFaits;
     this.form1ObjetDeLaRequete= form.form1ObjetDeLaRequete;
     this.form1Sujet= form.form1Sujet;
+    this.form1Statut= form.form1Statut;
   }
 
   openDialog(): void {

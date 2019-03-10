@@ -1,5 +1,5 @@
-<h3>Commission Rogatoire</h3>
-
+<h3 style="text-align:center">Commission Rogatoire</h3>
+<br>
 
 <div class="container">
     <label for="form1Prenom">Prénom</label>
@@ -39,7 +39,7 @@
     <label for="form1Sujet">Sujet</label>
     <textarea [(ngModel)]="form1Sujet" id="form1Sujet" name="form1Sujet" placeholder="Write something.." style="height:200px" ></textarea>
 
-    <div>
+    <div style="text-align:center;">
     <button *ngIf="form1Statut=='Brouillon'" class="button" name="button" value="Brouillon" (click)="addFormBrouillon()">Enregister en tant que brouillon</button>
     <button *ngIf="form1Statut=='Brouillon'" class="button" name="button" value="Complete" (click)="addFormComplete()">Enregister en tant que document complété</button>
     </div>
