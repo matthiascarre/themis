@@ -35,6 +35,12 @@ export class ApplyIntentService {
     else if(intent == "Sauvegarder formulaire"){
       this.IntentSource.next("Sauvegarder formulaire");
     }
+    else if(intent == "Arret Speech Rec"){
+      this.IntentSource.next("Arret Speech Rec");
+    }
+    else if(intent == "Activer Speech Rec Sujet"){
+      this.IntentSource.next("Activer Speech Rec Sujet");
+    }
     else{
       console.log("Intent non reconnu.")
     }

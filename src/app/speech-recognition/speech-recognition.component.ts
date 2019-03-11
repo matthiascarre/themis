@@ -3,6 +3,7 @@ import { SpeechRecognitionService } from '../speechrecognitionservice.service';
 import {DataService} from '../data.service';
 import {ApplyIntentService} from '../applyintentservice.service';
 import {ActivatedRoute,Router} from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-speech-recognition',
@@ -16,13 +17,22 @@ export class SpeechRecognitionComponent implements OnInit {
   isListenning: boolean=false;
   buttonText: string = "Activer reconnaissance vocale";
 
-  constructor(private applyIntentService: ApplyIntentService ,private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
+  private intentRef: Subscription = null;
+
+  constructor(public intent:ApplyIntentService , private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
       this.showSearchButton = true;
       this.speechData = "";
   }
 
   ngOnInit() {
-      console.log("hello")
+    this.intentRef = this.intent.IntentMessage.subscribe((text)=>{
+      if(text=="Arret Speech Rec"){
+        this.stopVoiceRecog();
+      }
+    },
+    (err)=>{
+      console.log("Erreur lors du traitement de l'intent.");
+    });
   }
 
   ngOnDestroy() {
@@ -52,7 +62,7 @@ export class SpeechRecognitionComponent implements OnInit {
               this.dataService.getLuisIntent(value)
               .subscribe(intent =>{
                 console.log("L'intent est : " + intent.topScoringIntent.intent);
-                this.applyIntentService.applyIntent(intent.topScoringIntent.intent);
+                this.intent.applyIntent(intent.topScoringIntent.intent);
               });
 
 

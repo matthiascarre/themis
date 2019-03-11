@@ -5,6 +5,7 @@ import {ApplyIntentService} from '../applyintentservice.service';
 import {ActivatedRoute,Router} from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
+import { SpeechRecognitionService } from '../speechrecognitionservice.service';
 
 
 export interface DialogData {
@@ -39,9 +40,14 @@ export class Formulaire1Component implements OnInit {
   booleantest: boolean= false;
   popupmessage: string;
 
+  speechData: string;
+  speechDataList: string[];
+
   private intentRef: Subscription = null;
 
-  constructor(public intent:ApplyIntentService, public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+
+
+  constructor(private speechRecognitionService: SpeechRecognitionService, public intent:ApplyIntentService, public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.route.params.subscribe( params => this.id=params.id )
     console.log("Id du document: "+this.id)
   }
@@ -51,11 +57,13 @@ export class Formulaire1Component implements OnInit {
       if(text=="Sauvegarder formulaire"){
         this.addFormBrouillon();
       }
+      if(text=="Activer Speech Rec Sujet"){
+        this.startAudioRecog();
+      }
     },
     (err)=>{
       console.log("Erreur lors du traitement de l'intent.");
     });
-    
     if(this.id=="new"){
       console.log("Creating new document")
       this.form1Prenom = "";
@@ -243,6 +251,47 @@ export class Formulaire1Component implements OnInit {
     this.form1ObjetDeLaRequete= form.form1ObjetDeLaRequete;
     this.form1Sujet= form.form1Sujet;
     this.form1Statut= form.form1Statut;
+  }
+
+
+
+  startAudioRecog(){
+    this.speechDataList=[this.form1Sujet]
+    this.speechRecognitionService.record()
+        .subscribe(
+        //listener
+        (value) => {
+            this.speechData = value;
+            console.log(value);
+            this.dataService.getLuisIntent(value)
+            .subscribe(intent =>{
+              console.log("L'intent est : " + intent.topScoringIntent.intent);
+              if(intent.topScoringIntent.intent=="None"){
+                this.speechDataList.push(this.speechData);
+                this.form1Sujet= this.form1Sujet + " " +  this.speechData;
+              }
+              else{
+                this.speechDataList.push(this.speechData);
+                this.form1Sujet= this.form1Sujet + " " +  this.speechData;
+                console.log("Boucle else");
+                //this.applyIntentService.applyIntent(intent.topScoringIntent.intent);
+              }
+            });
+        },
+        //error
+        (err) => {
+            console.log(err);
+            if (err.error == "no-speech") {
+                console.log("--restarting service--");
+                this.startAudioRecog();
+            }
+        },
+        //completion
+        () => {
+            console.log("--complete--");
+            //this.activateSpeechSearchMovie();
+        });
+
   }
 
   openDialog(): void {
