@@ -29,6 +29,9 @@ export class SpeechRecognitionComponent implements OnInit {
       if(text=="Arret Speech Rec"){
         this.stopVoiceRecog();
       }
+      if(text=="Activer Speech Rec Sujet"){
+        this.stopVoiceRecog();
+      }
     },
     (err)=>{
       console.log("Erreur lors du traitement de l'intent.");

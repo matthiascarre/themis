@@ -45,6 +45,11 @@ export class DataService {
     .pipe(map(res => res.json()));
   }
 
+  getLuisIntentWritting(query){
+    return this.http.get('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/7bc90b51-bcdc-4303-a524-4095abb3a981?verbose=true&timezoneOffset=-360&subscription-key=22a90d6588bb497a94c185f677c34236&q='+query)
+    .pipe(map(res => res.json()));
+  }
+
   //
   // addShoppingItem(newItem){
   //   let headers = new Headers();

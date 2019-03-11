@@ -42,6 +42,7 @@ export class Formulaire1Component implements OnInit {
 
   speechData: string;
   speechDataList: string[];
+  isListenning: boolean=false;
 
   private intentRef: Subscription = null;
 
@@ -58,6 +59,9 @@ export class Formulaire1Component implements OnInit {
         this.addFormBrouillon();
       }
       if(text=="Activer Speech Rec Sujet"){
+        this.isListenning = true;
+        let el = document.getElementById("form1Sujet");
+        el.scrollIntoView({behavior:"smooth"});
         this.startAudioRecog();
       }
     },
@@ -263,17 +267,28 @@ export class Formulaire1Component implements OnInit {
         (value) => {
             this.speechData = value;
             console.log(value);
-            this.dataService.getLuisIntent(value)
+            this.dataService.getLuisIntentWritting(value)
             .subscribe(intent =>{
               console.log("L'intent est : " + intent.topScoringIntent.intent);
               if(intent.topScoringIntent.intent=="None"){
                 this.speechDataList.push(this.speechData);
-                this.form1Sujet= this.form1Sujet + " " +  this.speechData;
+                this.form1Sujet= this.concatenateStringArray(this.speechDataList);
+              }
+              else if(intent.topScoringIntent.intent=="Effacer phrase precedente"){
+                this.speechDataList.pop();
+                this.form1Sujet= this.concatenateStringArray(this.speechDataList);
+              }
+              else if(intent.topScoringIntent.intent=="Effacer bloque entier"){
+                this.speechDataList=[];
+                this.form1Sujet= "";
+              }
+              else if(intent.topScoringIntent.intent=="Quitter mode rédaction"){
+                //TODO
               }
               else{
                 this.speechDataList.push(this.speechData);
-                this.form1Sujet= this.form1Sujet + " " +  this.speechData;
-                console.log("Boucle else");
+                this.form1Sujet= this.concatenateStringArray(this.speechDataList);
+                console.log("Boucle else -> pas censé arriver");
                 //this.applyIntentService.applyIntent(intent.topScoringIntent.intent);
               }
             });
@@ -292,6 +307,19 @@ export class Formulaire1Component implements OnInit {
             //this.activateSpeechSearchMovie();
         });
 
+  }
+
+  concatenateStringArray(array){
+    var text: string="";
+    for (var i = 0; i < array.length; i++) {
+      if(i==0){
+        text = text + array[i];
+      }
+      else{
+        text = text + " " + array[i];
+      }
+    }
+    return text
   }
 
   openDialog(): void {

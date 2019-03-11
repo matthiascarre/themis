@@ -35,8 +35,12 @@
 
     <label for="form1ObjetDeLaRequete">Objet et motif de la requête</label>
     <input [(ngModel)]="form1ObjetDeLaRequete" type="text" id="form1ObjetDeLaRequete" name="form1ObjetDeLaRequete" placeholder="..." >
-
-    <label for="form1Sujet">Sujet</label>
+    <div>
+      <div>
+      <label for="form1Sujet">Sujet</label>
+      <img *ngIf="isListenning==true" src="./assets/mic.png" class="center" alt="" style="width: 3%; height: 3%">
+      </div>
+    </div>
     <textarea [(ngModel)]="form1Sujet" id="form1Sujet" name="form1Sujet" placeholder="Write something.." style="height:200px" ></textarea>
 
     <div style="text-align:center;">
