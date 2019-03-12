@@ -10,7 +10,7 @@ export class ApplyIntentService {
 
 
 
-  private IntentSource = new Subject<string>();
+  public IntentSource = new Subject<string>();
   public IntentMessage = this.IntentSource.asObservable();
 
 
@@ -33,17 +33,21 @@ export class ApplyIntentService {
       this.router.navigateByUrl('/liste-documents');
     }
     else if(intent == "Sauvegarder formulaire"){
-      this.IntentSource.next("Sauvegarder formulaire");
+      this.sendMessage("Sauvegarder formulaire");
     }
     else if(intent == "Arret Speech Rec"){
-      this.IntentSource.next("Arret Speech Rec");
+      this.sendMessage("Arret Speech Rec");
     }
     else if(intent == "Activer Speech Rec Sujet"){
-      this.IntentSource.next("Activer Speech Rec Sujet");
+      this.sendMessage("Activer Speech Rec Sujet");
     }
     else{
       console.log("Intent non reconnu.")
     }
+  }
+
+  sendMessage(string){
+    this.IntentSource.next(string);
   }
 
 }

@@ -18,6 +18,7 @@ export class SpeechRecognitionComponent implements OnInit {
   buttonText: string = "Activer reconnaissance vocale";
 
   private intentRef: Subscription = null;
+  private audioRecogReactivation: Subscription = null;
 
   constructor(public intent:ApplyIntentService , private speechRecognitionService: SpeechRecognitionService, private dataService: DataService, private router: Router) {
       this.showSearchButton = true;
@@ -30,6 +31,16 @@ export class SpeechRecognitionComponent implements OnInit {
         this.stopVoiceRecog();
       }
       if(text=="Activer Speech Rec Sujet"){
+        this.stopVoiceRecog();
+      }
+      if(text=="Réactiver reconnaissance vocale"){
+        if(this.isListenning==true){
+          console.log("Incohérence bug à corriger");
+        }
+        else{
+          this.activateSpeechSearchMovie()
+          console.log("Reconnaissance vocale générale réactivée.")
+        }
         this.stopVoiceRecog();
       }
     },

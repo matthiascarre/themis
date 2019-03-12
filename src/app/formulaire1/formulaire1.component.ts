@@ -8,10 +8,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { SpeechRecognitionService } from '../speechrecognitionservice.service';
 
 
+
 export interface DialogData {
   message: string;
 }
-
 
 @Component({
   selector: 'app-formulaire1',
@@ -35,7 +35,6 @@ export class Formulaire1Component implements OnInit {
   form1Sujet: string;
   form1Statut: string;
   id: string;
-  //FormList: Form1[]=[];
   Form: Form1;
   booleantest: boolean= false;
   popupmessage: string;
@@ -274,7 +273,7 @@ export class Formulaire1Component implements OnInit {
                 this.speechDataList.push(this.speechData);
                 this.form1Sujet= this.concatenateStringArray(this.speechDataList);
               }
-              else if(intent.topScoringIntent.intent=="Effacer phrase precedente"){
+              else if(intent.topScoringIntent.intent=="Corriger phrase precedente"){
                 this.speechDataList.pop();
                 this.form1Sujet= this.concatenateStringArray(this.speechDataList);
               }
@@ -282,14 +281,14 @@ export class Formulaire1Component implements OnInit {
                 this.speechDataList=[];
                 this.form1Sujet= "";
               }
-              else if(intent.topScoringIntent.intent=="Quitter mode rédaction"){
-                //TODO
+              else if(intent.topScoringIntent.intent=="Quitter mode écriture"){
+                this.stopVoiceRecog();
+                this.intent.sendMessage("Réactiver reconnaissance vocale");
               }
               else{
                 this.speechDataList.push(this.speechData);
                 this.form1Sujet= this.concatenateStringArray(this.speechDataList);
                 console.log("Boucle else -> pas censé arriver");
-                //this.applyIntentService.applyIntent(intent.topScoringIntent.intent);
               }
             });
         },
@@ -307,6 +306,11 @@ export class Formulaire1Component implements OnInit {
             //this.activateSpeechSearchMovie();
         });
 
+  }
+
+  stopVoiceRecog(){
+    this.speechRecognitionService.DestroySpeechObject();
+    console.log("Stopped listenning for subject!")
   }
 
   concatenateStringArray(array){
