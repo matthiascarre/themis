@@ -1,6 +1,7 @@
 <h2>
   Liste des documents enregistrés
 </h2>
+<br>
 
 <table>
   <tr>
@@ -19,7 +20,7 @@
     <td>{{form.form1InfoPersonneSujetteProcedure}}</td>
     <td>{{form.form1ResumeDesFaits}}</td>
     <td>{{form.form1Statut}}</td>
-    <td><button class="button" name="link to document" value="link to document" ><a href='./formulaire1/{{form._id}}'>Ouvrir</a></button></td>
+    <td><button class="button" name="link to document" value="link to document" (click)="redirectButton(form._id)" >Ouvrir</button></td>
   </tr>
 
 </table>

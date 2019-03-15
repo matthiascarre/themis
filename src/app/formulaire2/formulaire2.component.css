@@ -11,20 +11,17 @@ input[type=text], select, textarea {
   margin-bottom: 16px;
   resize: vertical;
 }
-
 input[type=submit] {
-  background-color: #4CAF50;
+  background-color: rgba(12, 170, 209, 0.616);
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
-
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: rgba(12, 170, 209, 0.616);
 }
-
 .container {
   border-radius: 5px;
   background-color: #f2f2f2;

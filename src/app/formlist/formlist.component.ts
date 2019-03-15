@@ -23,7 +23,11 @@ export class FormlistComponent implements OnInit {
     })
   }
 
-  
+  redirectButton(id){
+    this.router.navigateByUrl('/formulaire1/'+id);
+  }
+
+
 
   ngOnInit() {
     this.getDocumentList();

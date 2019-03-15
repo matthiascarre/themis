@@ -2,21 +2,18 @@ table {
   border-collapse: collapse;
   width: 100%;
 }
-
 th, td {
   text-align: left;
   padding: 8px;
 }
-
 tr:nth-child(even){background-color: #f2f2f2}
-
 th {
-  background-color: #4CAF50;
+  background-color: rgba(12, 170, 209, 0.616);
   color: white;
+  border: 2px solid #f3f3f3
 }
-
 .button {
-  background-color: #4CAF50;
+  background-color: rgba(12, 170, 209, 0.616);
   border: none;
   color: white;
   padding: 15px 32px;
@@ -26,4 +23,8 @@ th {
   font-size: 16px;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+table.tr.td.a {
+ color: white;
 }

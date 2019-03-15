@@ -80,7 +80,8 @@ router.put('/form1/:id',(req,res,next)=>{
       form1ResumeDesFaits: req.body.form1ResumeDesFaits,
       form1QualificationJuridiqueDesFaits: req.body.form1QualificationJuridiqueDesFaits,
       form1ObjetDeLaRequete: req.body.form1ObjetDeLaRequete,
-      form1Sujet: req.body.form1Sujet
+      form1Sujet: req.body.form1Sujet,
+      form1Statut: req.body.form1Statut,
     }
   },
   function(err, result){
