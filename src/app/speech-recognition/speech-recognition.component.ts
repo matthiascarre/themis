@@ -17,6 +17,8 @@ export class SpeechRecognitionComponent implements OnInit {
   isListenning: boolean=false;
   buttonText: string = "Activer reconnaissance vocale";
 
+  scorestring:string;
+
   private intentRef: Subscription = null;
   private audioRecogReactivation: Subscription = null;
 
@@ -76,7 +78,15 @@ export class SpeechRecognitionComponent implements OnInit {
               this.dataService.getLuisIntent(value)
               .subscribe(intent =>{
                 console.log("L'intent est : " + intent.topScoringIntent.intent);
-                this.intent.applyIntent(intent.topScoringIntent.intent);
+                console.log("Son score est : " + intent.topScoringIntent.score);
+                this.scorestring=intent.topScoringIntent.score.toString();
+                if (parseFloat(this.scorestring)<0.7){
+                  console.log("Score insuffisant : " + this.scorestring)
+                  this.intent.applyIntent("None");
+                }
+                else {
+                  this.intent.applyIntent(intent.topScoringIntent.intent);
+                }
               });
 
 

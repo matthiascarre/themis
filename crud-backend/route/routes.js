@@ -51,7 +51,8 @@ router.post('/form1',(req,res,next)=>{
     form1QualificationJuridiqueDesFaits: req.body.form1QualificationJuridiqueDesFaits,
     form1ObjetDeLaRequete: req.body.form1ObjetDeLaRequete,
     form1Sujet: req.body.form1Sujet,
-    form1Statut: req.body.form1Statut
+    form1Statut: req.body.form1Statut,
+    form1DateLastModified: req.body.form1DateLastModified
   })
   newForm1.save((err,form1)=>{
     if(err){
@@ -82,6 +83,7 @@ router.put('/form1/:id',(req,res,next)=>{
       form1ObjetDeLaRequete: req.body.form1ObjetDeLaRequete,
       form1Sujet: req.body.form1Sujet,
       form1Statut: req.body.form1Statut,
+      form1DateLastModified: req.body.form1DateLastModified
     }
   },
   function(err, result){

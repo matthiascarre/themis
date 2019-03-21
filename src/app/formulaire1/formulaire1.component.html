@@ -3,49 +3,50 @@
 
 <div class="container">
     <label for="form1Prenom">Prénom</label>
-    <input [(ngModel)]="form1Prenom" type="text" id="form1Prenom" name="form1Prenom" placeholder="..." >
+    <input [(ngModel)]="form1Prenom" [disabled]="form1Statut=='Complété'" type="text" id="form1Prenom" name="form1Prenom" placeholder="..." >
 
     <label for="form1Nom">Nom</label>
-    <input [(ngModel)]="form1Nom" type="text" id="form1Nom" name="form1Nom" placeholder="..." >
+    <input [(ngModel)]="form1Nom" [disabled]="form1Statut=='Complété'" type="text" id="form1Nom" name="form1Nom" placeholder="..." >
 
     <label for="form1LieuDate">Lieu, le ...(date)</label>
-    <input [(ngModel)]="form1LieuDate" type="text" id="form1LieuDate" name="form1LieuDate" placeholder="..." >
+    <input [(ngModel)]="form1LieuDate" [disabled]="form1Statut=='Complété'" type="text" id="form1LieuDate" name="form1LieuDate" placeholder="..." >
 
     <label for="form1AutoriteJudiciaire">A l'autorité judiciaire compétente pour la localité de ... /pays ou toute autre autorité</label>
-    <input [(ngModel)]="form1AutoriteJudiciaire" type="text" id="form1AutoriteJudiciaire" name="form1AutoriteJudiciaire" placeholder="..." >
+    <input [(ngModel)]="form1AutoriteJudiciaire" [disabled]="form1Statut=='Complété'" type="text" id="form1AutoriteJudiciaire" name="form1AutoriteJudiciaire" placeholder="..." >
 
     <label for="form1PresenteePar">Commission rogatoire présentée par</label>
-    <input [(ngModel)]="form1PresenteePar" type="text" id="form1PresenteePar" name="form1PresenteePar" placeholder="..." >
+    <input [(ngModel)]="form1PresenteePar" [disabled]="form1Statut=='Complété'" type="text" id="form1PresenteePar" name="form1PresenteePar" placeholder="..." >
 
     <label for="form1Traite">aux termes du Traité</label>
-    <input [(ngModel)]="form1Traite" type="text" id="form1Traite" name="form1Traite" placeholder="..." >
+    <input [(ngModel)]="form1Traite" [disabled]="form1Statut=='Complété'" type="text" id="form1Traite" name="form1Traite" placeholder="..." >
 
     <label for="form1InfoPersonneSujetteProcedure">dans le cadre de l'instruction pénale dirigée contre:
     Nom, prénom, filiation, origine, état civil, etc....</label>
-    <input [(ngModel)]="form1InfoPersonneSujetteProcedure" type="text" id="form1InfoPersonneSujetteProcedure" name="form1InfoPersonneSujetteProcedure" placeholder="..." >
+    <input [(ngModel)]="form1InfoPersonneSujetteProcedure" [disabled]="form1Statut=='Complété'" type="text" id="form1InfoPersonneSujetteProcedure" name="form1InfoPersonneSujetteProcedure" placeholder="..." >
 
     <label for="form1FaitsPrevenus">prévenus de....</label>
-    <input [(ngModel)]="form1FaitsPrevenus" type="text" id="form1FaitsPrevenus" name="form1FaitsPrevenus" placeholder="..." >
+    <input [(ngModel)]="form1FaitsPrevenus" [disabled]="form1Statut=='Complété'" type="text" id="form1FaitsPrevenus" name="form1FaitsPrevenus" placeholder="..." >
 
     <label for="form1ResumeDesFaits">Résumé des faits</label>
-    <input [(ngModel)]="form1ResumeDesFaits" type="text" id="form1ResumeDesFaits" name="form1ResumeDesFaits" placeholder="..." >
+    <input [(ngModel)]="form1ResumeDesFaits" [disabled]="form1Statut=='Complété'" type="text" id="form1ResumeDesFaits" name="form1ResumeDesFaits" placeholder="..." >
 
     <label for="form1QualificationJuridiqueDesFaits">Qualification juridique des faits</label>
-    <input [(ngModel)]="form1QualificationJuridiqueDesFaits" type="text" id="form1QualificationJuridiqueDesFaits" name="form1QualificationJuridiqueDesFaits" placeholder="..." >
+    <input [(ngModel)]="form1QualificationJuridiqueDesFaits" [disabled]="form1Statut=='Complété'" type="text" id="form1QualificationJuridiqueDesFaits" name="form1QualificationJuridiqueDesFaits" placeholder="..." >
 
     <label for="form1ObjetDeLaRequete">Objet et motif de la requête</label>
-    <input [(ngModel)]="form1ObjetDeLaRequete" type="text" id="form1ObjetDeLaRequete" name="form1ObjetDeLaRequete" placeholder="..." >
+    <input [(ngModel)]="form1ObjetDeLaRequete" [disabled]="form1Statut=='Complété'" type="text" id="form1ObjetDeLaRequete" name="form1ObjetDeLaRequete" placeholder="..." >
     <div>
       <div>
       <label for="form1Sujet">Sujet</label>
       <img *ngIf="isListenning==true" src="./assets/mic.png" class="center" alt="" style="width: 3%; height: 3%">
       </div>
     </div>
-    <textarea [(ngModel)]="form1Sujet" id="form1Sujet" name="form1Sujet" placeholder="Write something.." style="height:200px" ></textarea>
+    <textarea [(ngModel)]="form1Sujet" [disabled]="form1Statut=='Complété'" id="form1Sujet" name="form1Sujet" placeholder="Write something.." style="height:200px" ></textarea>
 
     <div style="text-align:center;">
     <button *ngIf="form1Statut=='Brouillon'" class="button" name="button" value="Brouillon" (click)="addFormBrouillon()">Enregister en tant que brouillon</button>
     <button *ngIf="form1Statut=='Brouillon'" class="button" name="button" value="Complete" (click)="addFormComplete()">Enregister en tant que document complété</button>
+    <button *ngIf="form1Statut=='Complété'" class="button" name="button" value="Complete" (click)="generatePDF()">Générer le PDF</button>
     </div>
 
 </div>

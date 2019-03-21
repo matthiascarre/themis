@@ -5,7 +5,7 @@
 
 <table>
   <tr>
-    <th>Id</th>
+    <th>Dernière modif</th>
     <th>Prénom</th>
     <th>Nom</th>
     <th>Personne sujette à la procédure</th>
@@ -14,7 +14,7 @@
     <th></th>
   </tr>
   <tr *ngFor='let form of documentList' >
-    <td>{{form._id}}</td>
+    <td>{{form.form1DateLastModified}}</td>
     <td>{{form.form1Prenom}}</td>
     <td>{{form.form1Nom}}</td>
     <td>{{form.form1InfoPersonneSujetteProcedure}}</td>

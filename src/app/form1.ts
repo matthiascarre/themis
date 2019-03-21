@@ -13,5 +13,6 @@ export class Form1{
   form1ObjetDeLaRequete: string;
   form1Sujet: string;
   form1Statut: string;
+  form1DateLastModified: string;
 
 }

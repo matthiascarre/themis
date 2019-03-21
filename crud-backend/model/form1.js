@@ -49,6 +49,10 @@ const Form1Schema = mongoose.Schema({
     type: String,
     required: false
   },
+  form1DateLastModified: {
+    type: String,
+    required: false
+  },
   form1Statut: {
     type: String,
     required: true

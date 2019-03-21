@@ -6,6 +6,8 @@ import {ActivatedRoute,Router} from '@angular/router';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { SpeechRecognitionService } from '../speechrecognitionservice.service';
+import * as jsPDF from 'jspdf';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -17,7 +19,7 @@ export interface DialogData {
   selector: 'app-formulaire1',
   templateUrl: './formulaire1.component.html',
   styleUrls: ['./formulaire1.component.css'],
-  providers: [DataService]
+  providers: [DataService, DatePipe]
 })
 
 export class Formulaire1Component implements OnInit {
@@ -34,10 +36,13 @@ export class Formulaire1Component implements OnInit {
   form1ObjetDeLaRequete: string;
   form1Sujet: string;
   form1Statut: string;
+  form1DateLastModified: string;
   id: string;
   Form: Form1;
   booleantest: boolean= false;
   popupmessage: string;
+
+  scorestring: string;
 
   speechData: string;
   speechDataList: string[];
@@ -47,12 +52,13 @@ export class Formulaire1Component implements OnInit {
 
 
 
-  constructor(private speechRecognitionService: SpeechRecognitionService, public intent:ApplyIntentService, public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+  constructor(private datePipe: DatePipe, private speechRecognitionService: SpeechRecognitionService, public intent:ApplyIntentService, public dialog: MatDialog, private dataService: DataService, private router: Router, private route: ActivatedRoute) {
     this.route.params.subscribe( params => this.id=params.id )
     console.log("Id du document: "+this.id)
   }
 
   ngOnInit() {
+    console.log(this.datePipe.transform(Date.now(),'HH:mm dd-MM-yyyy'));
     this.intentRef = this.intent.IntentMessage.subscribe((text)=>{
       if(text=="Sauvegarder formulaire"){
         this.addFormBrouillon();
@@ -88,7 +94,6 @@ export class Formulaire1Component implements OnInit {
       this.getDocument()
     }
   }
-
   addFormBrouillon(){
     if(this.id=="new"){
       let newForm : Form1 = {
@@ -104,7 +109,8 @@ export class Formulaire1Component implements OnInit {
         form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
         form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
         form1Sujet: this.form1Sujet,
-        form1Statut: "Brouillon"
+        form1Statut: "Brouillon",
+        form1DateLastModified: this.datePipe.transform(Date.now(),'HH:mm dd-MM-yyyy').toString()
       }
       console.log(newForm);
       this.dataService.addForm1(newForm)
@@ -134,7 +140,8 @@ export class Formulaire1Component implements OnInit {
         form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
         form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
         form1Sujet: this.form1Sujet,
-        form1Statut: "Brouillon"
+        form1Statut: "Brouillon",
+        form1DateLastModified: this.datePipe.transform(Date.now(),'HH:mm dd-MM-yyyy').toString()
       }
       console.log(newForm);
       this.dataService.updateForm1(newForm,this.id)
@@ -180,7 +187,8 @@ export class Formulaire1Component implements OnInit {
         form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
         form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
         form1Sujet: this.form1Sujet,
-        form1Statut: "Complété"
+        form1Statut: "Complété",
+        form1DateLastModified: this.datePipe.transform(Date.now(),'HH:mm dd-MM-yyyy').toString()
       }
       console.log(newForm);
       this.dataService.addForm1(newForm)
@@ -210,7 +218,8 @@ export class Formulaire1Component implements OnInit {
         form1QualificationJuridiqueDesFaits: this.form1QualificationJuridiqueDesFaits,
         form1ObjetDeLaRequete: this.form1ObjetDeLaRequete,
         form1Sujet: this.form1Sujet,
-        form1Statut: "Complété"
+        form1Statut: "Complété",
+        form1DateLastModified: this.datePipe.transform(Date.now(),'HH:mm dd-MM-yyyy').toString()
       }
       console.log(newForm);
       this.dataService.updateForm1(newForm,this.id)
@@ -269,7 +278,14 @@ export class Formulaire1Component implements OnInit {
             this.dataService.getLuisIntentWritting(value)
             .subscribe(intent =>{
               console.log("L'intent est : " + intent.topScoringIntent.intent);
+              console.log("Son score est : " + intent.topScoringIntent.score);
+              this.scorestring=intent.topScoringIntent.score.toString();
               if(intent.topScoringIntent.intent=="None"){
+                this.speechDataList.push(this.speechData);
+                this.form1Sujet= this.concatenateStringArray(this.speechDataList);
+              }
+              else if(parseFloat(this.scorestring)<0.8){
+                console.log("Score insuffisant : " + this.scorestring)
                 this.speechDataList.push(this.speechData);
                 this.form1Sujet= this.concatenateStringArray(this.speechDataList);
               }
@@ -277,7 +293,7 @@ export class Formulaire1Component implements OnInit {
                 this.speechDataList.pop();
                 this.form1Sujet= this.concatenateStringArray(this.speechDataList);
               }
-              else if(intent.topScoringIntent.intent=="Effacer bloque entier"){
+              else if(intent.topScoringIntent.intent=="Effacer bloc entier"){
                 this.speechDataList=[];
                 this.form1Sujet= "";
               }
@@ -324,6 +340,31 @@ export class Formulaire1Component implements OnInit {
       }
     }
     return text
+  }
+
+
+  generatePDF(){
+    const doc = new jsPDF();
+    doc.setFontSize(22);
+    doc.text(65, 25, 'Commission rogatoire');
+    doc.line(60, 28, 147, 28);
+    doc.setFontSize(14);
+    doc.text("Prénom : " + this.form1Prenom,30,45);
+    doc.text("Nom : " + this.form1Nom,30,55);
+    doc.text("Lieu et date : " + this.form1LieuDate,30,65);
+    doc.text("A l'autorité judiciaire judiciaire compétente pour la localité de : " + this.form1AutoriteJudiciaire,30,75);
+    doc.text("Commission rogatoire présentée par : " + this.form1PresenteePar,30,85);
+    doc.text("Aux termes du traité : " + this.form1Traite,30,95);
+    doc.text("Dans le cadre de l'instruction pénale dirigée contre :",30,105);
+    doc.text(this.form1InfoPersonneSujetteProcedure,30,115);
+    doc.text("Prévenus de : " + this.form1FaitsPrevenus,30,125);
+    doc.text("Résumé des faits : " + this.form1ResumeDesFaits,30,135);
+    doc.text("Qualification juridique des faits : " + this.form1QualificationJuridiqueDesFaits,30,145);
+    doc.text("Objet et motif de la requête : " + this.form1ObjetDeLaRequete,30,155);
+    doc.text("Sujet : ",30,165);
+    doc.text(this.form1Sujet,30,175);
+    doc.save("Document.pdf");
+
   }
 
   openDialog(): void {

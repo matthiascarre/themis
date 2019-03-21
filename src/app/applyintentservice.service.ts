@@ -38,8 +38,11 @@ export class ApplyIntentService {
     else if(intent == "Arret Speech Rec"){
       this.sendMessage("Arret Speech Rec");
     }
-    else if(intent == "Activer Speech Rec Sujet"){
+    else if(intent == "Activer Reconnaissance Vocale Sujet"){
       this.sendMessage("Activer Speech Rec Sujet");
+    }
+    else if(intent == "None"){
+      console.log("Intent non reconnu.")
     }
     else{
       console.log("Intent non reconnu.")
